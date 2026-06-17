@@ -9,29 +9,65 @@
     h1 { color: #2c3e50; }
     .todo-card { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
     .todo-title { margin: 0 0 8px 0; color: #2980b9; }
+    
+    .completed .todo-title-link { text-decoration: line-through !important; color: #95a5a6 !important; }
+    .completed { background: #eaeded; }
+
     .todo-desc { margin: 0 0 10px 0; color: #555; }
     .todo-date { font-size: 0.8rem; color: #999; }
+    
+    .actions { margin-top: 15px; display: flex; gap: 10px; }
+    .btn { padding: 6px 12px; border: none; border-radius: 4px; cursor: pointer; font-size: 0.9rem; color: white; }
+    .btn-done { background: #2ecc71; }
+    .btn-return { background: #f39c12; }
+    .btn-delete { background: #e74c3c; }
+    .form-inline { display: inline; margin: 0; }
+    .ml-auto { margin-left: auto; }
   </style>
 </head>
 <body>
 
-  <h1>Список задач (EJS Rendering)</h1>
+  <h1>Список задач</h1>
+
+  <form action="/api/todos" method="GET" style="margin-bottom: 25px; display: flex; gap: 10px;">
+    <input type="text" name="search" placeholder="Поиск по названию..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
+    <button type="submit" style="padding: 10px 20px; background: #34495e; color: white; border: none; border-radius: 5px; cursor: pointer;">Найти</button>
+    <a href="/api/todos" style="padding: 10px 15px; background: #95a5a6; color: white; text-decoration: none; border-radius: 5px;">Сбросить</a>
+  </form>
 
   <div class="todo-list">
     <% if (todos && todos.length > 0) { %>
-      <% todos.forEach(todo => { %>
-        <div class="todo-card">
+      <% for (let todo of todos) { %>
+        <div class="todo-card <%= todo.completed ? 'completed' : '' %>">
           <h3 class="todo-title">
-            <a href="<%= todo._id %>" style="text-decoration: none; color: inherit;">
+            <a href="/api/todos/<%= todo._id %>" class="todo-title-link" style="text-decoration: none; color: inherit;">
               <%= todo.title %>
             </a>
           </h3>
           <p class="todo-desc"><%= todo.desc %></p>
           <span class="todo-date">Создано: <%= new Date(todo.createdAt).toLocaleDateString('ru-RU') %></span>
+          
+          <div class="actions">
+            
+            <form action="/<%= todo._id %>?_method=PATCH" method="POST" class="form-inline">
+              <% if (!todo.completed) { %>
+                <input type="hidden" name="completed" value="true">
+                <button type="submit" class="btn btn-done">Сделано</button>
+              <% } else { %>
+                <input type="hidden" name="completed" value="false">
+                <button type="submit" class="btn btn-return">Вернуть</button>
+              <% } %>
+            </form>
+
+            <form action="/<%= todo._id %>?_method=DELETE" method="POST" class="form-inline ml-auto" onsubmit="return confirm('Удалить эту задачу?')">
+              <button type="submit" class="btn btn-delete">Удалить</button>
+            </form>
+
+          </div>
         </div>
-      <% }) %>
+      <% } %>
     <% } else { %>
-      <p>Задач пока нет. Отдыхайте!</p>
+      <p>Задач не найдено.</p>
     <% } %>
   </div>
 

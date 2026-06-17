@@ -1,8 +1,9 @@
-import express from "express";
+import path from "path";
 import type { Request, Response, NextFunction } from "express";
+import express from "express";
 import dotenv from "dotenv";
 import todoRoutes from "./routes/todo.routes.ts"; // Импортируем роуты
-import path from "path";
+import methodOverride from "method-override"; // 1. Импортируем
 // Загружаем переменные окружения
 dotenv.config();
 
@@ -15,10 +16,21 @@ app.set("view engine", "ejs");
 app.set("views", path.resolve(process.cwd(), "src", "views"));
 
 app.use(express.json());
-// Полезно добавить для обработки данных из HTML-форм в будущем:
+
+// Обязательно для чтения данных из HTML-форм:
 app.use(express.urlencoded({ extended: true }));
 
-// Подключаем роуты задач с префиксом /api/todos
+// Подключаем method-override.
+// Строка '_method' означает, что мы будем передавать желаемый метод в URL как ?_method=DELETE
+app.use(methodOverride("_method"));
+
+// МИДЛВАР ДЛЯ ОТКЛЮЧЕНИЯ КЭША (Добавь этот блок)
+app.use((req, res, next) => {
+  res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
+  next();
+});
+
+// Подключаем роуты
 app.use("/", todoRoutes);
 
 // Глобальный обработчик ошибок (опционально, но крайне полезно)

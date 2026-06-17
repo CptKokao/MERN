@@ -3,4 +3,5 @@ export interface ITodo {
   title: string;
   desc: string;
   createdAt: string;
+  completed: boolean;
 }
