@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "target": "ES2022" /* Современный стандарт ECMAScript */,
+    "module": "NodeNext" /* Современное управление модулями */,
+    "moduleResolution": "NodeNext",
+    "outDir": "./dist" /* Папка для скомпилированного JS */,
+    "rootDir": "./src" /* Где лежит исходный код */,
+    "strict": true /* Включаем все строгие проверки типов */,
+    "esModuleInterop": true /* Совместимость с CommonJS модулями */,
+    "skipLibCheck": true /* Пропускать проверку типов в node_modules */,
+    "forceConsistentCasingInFileNames": true /* Чувствительность к регистру в именах файлов */
+  },
+  "include": ["src/**/*"]
+}
