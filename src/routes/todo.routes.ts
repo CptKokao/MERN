@@ -5,5 +5,6 @@ const router = Router();
 
 // GET /api/todos - получить все задачи
 router.get("/", TodoController.getAll);
+router.get("/:id", TodoController.getById);
 
 export default router;

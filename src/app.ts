@@ -2,17 +2,24 @@ import express from "express";
 import type { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
 import todoRoutes from "./routes/todo.routes.ts"; // Импортируем роуты
+import path from "path";
 // Загружаем переменные окружения
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Middleware для парсинга JSON
+// НАСТРОЙКА EJS
+app.set("view engine", "ejs");
+// Указываем явный путь к папке views относительно корня проекта
+app.set("views", path.resolve(process.cwd(), "src", "views"));
+
 app.use(express.json());
+// Полезно добавить для обработки данных из HTML-форм в будущем:
+app.use(express.urlencoded({ extended: true }));
 
 // Подключаем роуты задач с префиксом /api/todos
-app.use("/api/todos", todoRoutes);
+app.use("/", todoRoutes);
 
 // Глобальный обработчик ошибок (опционально, но крайне полезно)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {

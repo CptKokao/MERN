@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Мой Список Дел</title>
+  <style>
+    body { font-family: sans-serif; background: #f4f4f9; color: #333; max-width: 600px; margin: 40px auto; padding: 0 20px; }
+    h1 { color: #2c3e50; }
+    .todo-card { background: white; padding: 15px; margin-bottom: 15px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+    .todo-title { margin: 0 0 8px 0; color: #2980b9; }
+    .todo-desc { margin: 0 0 10px 0; color: #555; }
+    .todo-date { font-size: 0.8rem; color: #999; }
+  </style>
+</head>
+<body>
+
+  <h1>Список задач (EJS Rendering)</h1>
+
+  <div class="todo-list">
+    <% if (todos && todos.length > 0) { %>
+      <% todos.forEach(todo => { %>
+        <div class="todo-card">
+          <h3 class="todo-title">
+            <a href="<%= todo._id %>" style="text-decoration: none; color: inherit;">
+              <%= todo.title %>
+            </a>
+          </h3>
+          <p class="todo-desc"><%= todo.desc %></p>
+          <span class="todo-date">Создано: <%= new Date(todo.createdAt).toLocaleDateString('ru-RU') %></span>
+        </div>
+      <% }) %>
+    <% } else { %>
+      <p>Задач пока нет. Отдыхайте!</p>
+    <% } %>
+  </div>
+
+</body>
+</html>

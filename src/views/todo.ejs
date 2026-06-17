@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title><%= todo.title %></title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f4f4f9;
+        color: #333;
+        max-width: 600px;
+        margin: 40px auto;
+        padding: 0 20px;
+      }
+      .todo-details {
+        background: white;
+        padding: 25px;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2c3e50;
+        margin-top: 0;
+      }
+      p {
+        color: #555;
+        line-height: 1.6;
+      }
+      .date {
+        font-size: 0.85rem;
+        color: #999;
+        display: block;
+        margin-bottom: 20px;
+      }
+      .btn-back {
+        display: inline-block;
+        padding: 10px 15px;
+        background: #2980b9;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .btn-back:hover {
+        background: #3498db;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="todo-details">
+      <h1><%= todo.title %></h1>
+      <span class="date"
+        >Создано: <%= new Date(todo.createdAt).toLocaleString('ru-RU') %></span
+      >
+      <p><strong>Описание:</strong> <%= todo.desc %></p>
+      <p><strong>ID задачи:</strong> <code><%= todo._id %></code></p>
+
+      <a href="/" class="btn-back">← Назад к списку</a>
+    </div>
+  </body>
+</html>

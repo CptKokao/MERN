@@ -1,24 +1,27 @@
+import { database } from "../models/loaddatabase.js";
 import type { ITodo } from "../types/todo.ts";
-import fs from "node:fs/promises";
-import path from "node:path";
+
+const todos = database.todos as ITodo[];
 
 export const TodoService = {
   // Асинхронный метод, чтобы потом было легко заменить на реальный запрос к БД
   async getAllTodos(): Promise<ITodo[]> {
     try {
-      // process.cwd() всегда смотрит на корень твоего проекта
-      const filePath = path.resolve(process.cwd(), "data", "todos.json");
-
-      const fileData = await fs.readFile(filePath, "utf-8");
-
-      // Парсим JSON строку в объект
-      const parsedData = JSON.parse(fileData);
-
-      return parsedData.todos as ITodo[];
+      return todos;
     } catch (error) {
       console.error("Ошибка при чтении файла todos.json:", error);
       // Возвращаем пустой массив, если файл не найден или поврежден
       return [];
+    }
+  },
+  async getTodoById(id: string | string[]): Promise<ITodo | undefined> {
+    try {
+      console.log(id);
+      return todos.find((el) => el._id === id);
+    } catch (error) {
+      console.error("Ошибка при чтении файла todos.json:", error);
+      // Возвращаем пустой массив, если файл не найден или поврежден
+      return undefined;
     }
   },
 };
