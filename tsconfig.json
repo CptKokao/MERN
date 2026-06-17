@@ -8,6 +8,8 @@
     "strict": true /* Включаем все строгие проверки типов */,
     "esModuleInterop": true /* Совместимость с CommonJS модулями */,
     "skipLibCheck": true /* Пропускать проверку типов в node_modules */,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "forceConsistentCasingInFileNames": true /* Чувствительность к регистру в именах файлов */
   },
   "include": ["src/**/*"]

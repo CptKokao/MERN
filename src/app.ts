@@ -1,6 +1,7 @@
-import express, { Request, Response, NextFunction } from "express";
+import express from "express";
+import type { Request, Response, NextFunction } from "express";
 import dotenv from "dotenv";
-
+import todoRoutes from "./routes/todo.routes.ts"; // Импортируем роуты
 // Загружаем переменные окружения
 dotenv.config();
 
@@ -10,10 +11,8 @@ const PORT = process.env.PORT || 3000;
 // Middleware для парсинга JSON
 app.use(express.json());
 
-// Базовый роут для проверки
-app.get("/health", (req: Request, res: Response) => {
-  res.status(200).json({ status: "OK", timestamp: new Date() });
-});
+// Подключаем роуты задач с префиксом /api/todos
+app.use("/api/todos", todoRoutes);
 
 // Глобальный обработчик ошибок (опционально, но крайне полезно)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
