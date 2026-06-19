@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Мой Список Дел</title>
-  <link rel="stylesheet" href="/todos.css" />
+  <link rel="stylesheet" href="/main.css" />
 </head>
 <body>
 
@@ -14,7 +14,9 @@
     <input type="text" name="search" placeholder="Поиск по названию..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">
     <button type="submit" style="padding: 10px 20px; background: #34495e; color: white; border: none; border-radius: 5px; cursor: pointer;">Найти</button>
     <a href="/" style="padding: 10px 15px; background: #95a5a6; color: white; text-decoration: none; border-radius: 5px;">Сбросить</a>
+    <a href="/add" style="padding: 10px 15px; background: #4fa762; color: white; text-decoration: none; border-radius: 5px;">Добавить</a>
   </form>
+  
 
   <div class="todo-list">
     <% if (todos && todos.length > 0) { %>
@@ -29,7 +31,6 @@
           <span class="todo-date">Создано: <%= new Date(todo.createdAt).toLocaleDateString('ru-RU') %></span>
           
           <div class="actions">
-            
             <form action="/<%= todo._id %>?_method=PATCH" method="POST" class="form-inline">
               <% if (!todo.completed) { %>
                 <input type="hidden" name="completed" value="true">

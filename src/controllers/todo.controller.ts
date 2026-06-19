@@ -17,7 +17,7 @@ export const TodoController = {
         throw createError(404, "Todos not found");
       }
       // Рендерим шаблон views/index.ejs и передаем в него объект с данными
-      res.render("todos", { todos });
+      res.render("main", { todos });
     } catch (error) {
       // Передаем ошибку в глобальный обработчик ошибок Express
       next(error);
@@ -58,6 +58,32 @@ export const TodoController = {
       next(error);
     }
   },
+
+  async add(req: Request, res: Response, next: NextFunction): Promise<void> {
+    try {
+      const success = await TodoService.addTodo(req.body);
+
+      if (!success) {
+        throw createError(500, "Todo didn't create");
+      }
+      res.redirect("/");
+    } catch (error) {
+      next(error);
+    }
+  },
+
+  async addPage(
+    req: Request,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      res.render("add");
+    } catch (error) {
+      next(error);
+    }
+  },
+
   // Изменение статуса (выполнено / вернуть)
   async toggleStatus(
     req: Request,

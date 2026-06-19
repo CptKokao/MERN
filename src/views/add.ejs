@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Мой Список Дел</title>
+    <link rel="stylesheet" href="/add.css" />
+  </head>
+  <body>
+    <h1>Добавить задачу</h1>
+
+    <form action="/add" method="post">
+      <label>Заголовок</label>
+      <input name="title" />
+      <label>Описание</label>
+      <textarea name="desc"></textarea>
+      <div class="horizontal">
+        <input type="submit" value="Добавить" />
+      </div>
+    </form>
+  </body>
+</html>

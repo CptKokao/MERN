@@ -12,6 +12,9 @@ router.use(methodOverride("_method"));
 
 router.use(requestToContext);
 // GET /api/todos - получить все задачи
+router.post("/add", TodoController.add);
+router.get("/add", TodoController.addPage);
+
 router.get("/", TodoController.getAll);
 router.get("/:id", TodoController.getById);
 router.delete("/:id", TodoController.delete); // Маршрут для удаления

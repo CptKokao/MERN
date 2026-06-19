@@ -2,6 +2,7 @@ import type { ITodo } from "../types/todo.ts";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { join } from "node:path";
+import { getObjectId } from "../utility.ts";
 
 export const TodoService = {
   async _getRawData(): Promise<ITodo[]> {
@@ -63,6 +64,25 @@ export const TodoService = {
     if (todos.length === filteredTodos.length) return false;
 
     await this._saveData(filteredTodos);
+    return true;
+  },
+
+  async addTodo(body: { title: string; desc: string }): Promise<boolean> {
+    const todos = (await this._getRawData()) as ITodo[];
+
+    const { title, desc } = body;
+
+    const newTodo = {
+      _id: getObjectId(),
+      title,
+      desc,
+      createdAt: new Date().toString(),
+      completed: false,
+    };
+
+    todos.push(newTodo);
+
+    await this._saveData(todos);
     return true;
   },
   // МЕТОД ОБНОВЛЕНИЯ СТАТУСА (Сделано / Вернуть)
