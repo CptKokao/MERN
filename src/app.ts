@@ -1,9 +1,10 @@
-import path from "path";
-import type { Request, Response, NextFunction } from "express";
-import express from "express";
 import dotenv from "dotenv";
-import todoRoutes from "./routes/todo.routes.ts"; // Импортируем роуты
-import methodOverride from "method-override"; // 1. Импортируем
+import type { NextFunction, Request, Response } from "express";
+import express from "express";
+import { HttpError } from "http-errors";
+import path from "path";
+import todoRoutes from "./routes/todo.routes.ts";
+
 // Загружаем переменные окружения
 dotenv.config();
 
@@ -17,13 +18,6 @@ app.set("views", path.resolve(process.cwd(), "src", "views"));
 
 app.use(express.json());
 
-// Обязательно для чтения данных из HTML-форм:
-app.use(express.urlencoded({ extended: true }));
-
-// Подключаем method-override.
-// Строка '_method' означает, что мы будем передавать желаемый метод в URL как ?_method=DELETE
-app.use(methodOverride("_method"));
-
 // МИДЛВАР ДЛЯ ОТКЛЮЧЕНИЯ КЭША (Добавь этот блок)
 app.use((req, res, next) => {
   res.set("Cache-Control", "no-store, no-cache, must-revalidate, private");
@@ -35,8 +29,30 @@ app.use("/", todoRoutes);
 
 // Глобальный обработчик ошибок (опционально, но крайне полезно)
 app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-  console.error(err.stack);
-  res.status(500).json({ error: "Internal Server Error" });
+  let status = 500;
+  let message = "Внутренняя ошибка сервера";
+
+  // Проверяем: если пришедшая ошибка является экземпляром HttpError из библиотеки http-errors
+  if (err instanceof HttpError) {
+    status = err.status; // Теперь TypeScript знает, что здесь ТОЧНО есть поле status
+    message = err.message;
+  } else if (err instanceof Error) {
+    // Если это обычная системная ошибка (например, упал fs.readFile), берем её текст
+    message = err.message;
+  }
+
+  // Логируем для разработчика
+  console.error(`[Error ${status}]: ${message}`);
+  if (status === 500 && err instanceof Error) {
+    console.error(err.stack);
+  }
+
+  // Отдаем ответ
+  res.status(status);
+  res.render("error", {
+    status,
+    message,
+  });
 });
 
 app.listen(PORT, () => {

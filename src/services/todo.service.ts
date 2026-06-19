@@ -39,7 +39,6 @@ export const TodoService = {
     const todos = (await this._getRawData()) as ITodo[];
 
     try {
-      console.log(id);
       return todos.find((el) => el._id === id);
     } catch (error) {
       console.error("Ошибка при чтении файла todos.json:", error);

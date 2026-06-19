@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ошибка — <%= status %></title>
+    <style>
+      body {
+        font-family: sans-serif;
+        background: #f4f4f9;
+        color: #333;
+        text-align: center;
+        padding: 50px 20px;
+      }
+      .error-container {
+        background: white;
+        max-width: 500px;
+        margin: 0 auto;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #e74c3c;
+        font-size: 3rem;
+        margin: 0 0 10px 0;
+      }
+      h2 {
+        color: #2c3e50;
+        margin: 0 0 20px 0;
+      }
+      p {
+        color: #666;
+        font-size: 1.1rem;
+        line-height: 1.5;
+        margin-bottom: 30px;
+      }
+      .btn-home {
+        display: inline-block;
+        padding: 10px 20px;
+        background: #3498db;
+        color: white;
+        text-decoration: none;
+        border-radius: 5px;
+      }
+      .btn-home:hover {
+        background: #2980b9;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="error-container">
+      <h1><%= status %></h1>
+      <h2>Упс, что-то пошло не так!</h2>
+      <p><%= message %></p>
+      <a href="/" class="btn-home">Вернуться на главную</a>
+    </div>
+  </body>
+</html>

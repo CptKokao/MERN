@@ -1,5 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { TodoService } from "../services/todo.service.ts";
+import createError from "http-errors"; // Импортируем http-errors
 
 export const TodoController = {
   async getAll(req: Request, res: Response, next: NextFunction): Promise<void> {
@@ -11,6 +12,10 @@ export const TodoController = {
       const searchString = typeof search === "string" ? search : undefined;
 
       const todos = await TodoService.getAllTodos(searchString);
+
+      if (!todos) {
+        throw createError(404, "Todos not found");
+      }
       // Рендерим шаблон views/index.ejs и передаем в него объект с данными
       res.render("todos", { todos });
     } catch (error) {
@@ -18,6 +23,7 @@ export const TodoController = {
       next(error);
     }
   },
+
   async getById(
     req: Request,
     res: Response,
@@ -26,6 +32,9 @@ export const TodoController = {
     try {
       const todo = await TodoService.getTodoById(req.params.id);
 
+      if (!todo) {
+        throw createError(404, "Todo not found");
+      }
       // Рендерим шаблон views/index.ejs и передаем в него объект с данными
       res.render("todo", { todo });
     } catch (error) {
@@ -33,6 +42,7 @@ export const TodoController = {
       next(error);
     }
   },
+
   async delete(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
       const { id } = req.params;
