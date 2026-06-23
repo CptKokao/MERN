@@ -9,6 +9,17 @@
   <body>
     <h1>Добавить задачу</h1>
 
+    <% if (errors && errors.length > 0) { %>
+      <div class="error-box">
+        <strong>Пожалуйста, исправьте ошибки:</strong>
+        <ul>
+          <% errors.forEach(err => { %>
+            <li><%= err.msg %></li>
+          <% }) %>
+        </ul>
+      </div>
+    <% } %>
+
     <form action="/add" method="post">
       <label>Заголовок</label>
       <input name="title" />

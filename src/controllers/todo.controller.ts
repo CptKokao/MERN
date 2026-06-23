@@ -61,6 +61,16 @@ export const TodoController = {
 
   async add(req: Request, res: Response, next: NextFunction): Promise<void> {
     try {
+      // Если мидлвар валидации нашел ошибки
+      if (req.body.validationErrors) {
+        res.status(400).render("add", {
+          errors: req.body.validationErrors,
+          // Передаем назад то, что пользователь успел ввести
+          data: { title: req.body.title, desc: req.body.desc },
+        });
+        return;
+      }
+
       const success = await TodoService.addTodo(req.body);
 
       if (!success) {
@@ -78,7 +88,9 @@ export const TodoController = {
     next: NextFunction,
   ): Promise<void> {
     try {
-      res.render("add");
+      res.render("add", {
+        errors: [],
+      });
     } catch (error) {
       next(error);
     }
