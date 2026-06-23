@@ -4,6 +4,9 @@ import express from "express";
 import { HttpError } from "http-errors";
 import path from "path";
 import todoRoutes from "./routes/todo.routes.ts";
+import session from "express-session";
+import createSessionStore from "session-file-store";
+import { flash } from "express-flash-message";
 
 // Загружаем переменные окружения
 dotenv.config();
@@ -11,12 +14,36 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
+// Инициализируем файловое хранилище для сессий
+const FileStore = createSessionStore(session);
+
 // НАСТРОЙКА EJS
 app.set("view engine", "ejs");
 // Указываем явный путь к папке views относительно корня проекта
 app.set("views", path.resolve(process.cwd(), "src", "views"));
-
+// Работа с json форматом
 app.use(express.json());
+
+// НАСТРОЙКА НАДЕЖНЫХ СЕССИЙ (ЧЕРЕЗ ФАЙЛЫ)
+app.use(
+  session({
+    store: new FileStore({
+      path: "./sessions", // Папка в корне проекта, куда будут падать JSON-файлы сессий
+      ttl: 3600, // Время жизни сессии в секундах (1 час)
+      logFn: () => {}, // Отключаем лишний спам логов библиотеки в консоль
+    }),
+    secret: process.env.SESSION_SECRET || "super-secret-key-change-me", // Ключ шифрования куки
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: false, // true только если используешь HTTPS
+      maxAge: 60 * 60 * 1000, // 1 час жизни куки в браузере
+    },
+  }),
+);
+
+// ПОДКЛЮЧАЕМ FLASH СООБЩЕНИЯ (СТРОГО ПОСЛЕ СЕССИЙ!)
+app.use(flash({ sessionKeyName: "flash_messages" }));
 
 // МИДЛВАР ДЛЯ ОТКЛЮЧЕНИЯ КЭША (Добавь этот блок)
 app.use((req, res, next) => {

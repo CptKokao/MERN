@@ -9,6 +9,30 @@
 <body>
 
   <h1>Список задач</h1>
+  <% if (locals.successMsg) { %>
+    <div class="alert alert-success"><%= successMsg %></div>
+  <% } %>
+
+  <% if (locals.errorMsg) { %>
+    <div class="alert alert-error"><%= errorMsg %></div>
+  <% } %>
+
+  <div style="margin-bottom: 25px; display: flex; justify-content: space-between; align-items: center; background: #fff; padding: 10px 15px; border-radius: 5px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
+    <span style="font-size: 0.9rem; color: #666;">Сортировка по дате создания:</span>
+    <div>
+      <a href="/?sort=desc" 
+        style="text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.9rem; margin-right: 5px; 
+                <%= sortBy === 'desc' ? 'background: #3498db; color: white; font-weight: bold;' : 'color: #333; background: #eee;' %>">
+        Сначала новые
+      </a>
+      
+      <a href="/?sort=asc" 
+        style="text-decoration: none; padding: 5px 10px; border-radius: 4px; font-size: 0.9rem;
+                <%= sortBy === 'asc' ? 'background: #3498db; color: white; font-weight: bold;' : 'color: #333; background: #eee;' %>">
+        Сначала старые
+      </a>
+    </div>
+  </div>
 
   <form action="/" method="GET" style="margin-bottom: 25px; display: flex; gap: 10px;">
     <input type="text" name="search" placeholder="Поиск по названию..." style="flex: 1; padding: 10px; border: 1px solid #ccc; border-radius: 5px;">

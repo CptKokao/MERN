@@ -19,8 +19,13 @@ export const TodoService = {
     }
   },
   // Асинхронный метод, чтобы потом было легко заменить на реальный запрос к БД
-  async getAllTodos(search?: string): Promise<ITodo[]> {
+  async getAllTodos(
+    search?: string,
+    sortBy: "asc" | "desc" = "desc",
+  ): Promise<ITodo[]> {
     const todos = (await this._getRawData()) as ITodo[];
+    console.log(sortBy);
+    let filteredTodos = todos;
 
     try {
       // Если передан поисковый запрос, фильтруем массив
@@ -29,6 +34,15 @@ export const TodoService = {
         return todos.filter((todo) => todo.title.toLowerCase().includes(query));
       }
 
+      filteredTodos.sort((a, b) => {
+        const dateA = new Date(a.createdAt).getTime();
+        const dateB = new Date(b.createdAt).getTime();
+
+        // Если desc — новые сверху (от большего времени к меньшему)
+        // Если asc — старые сверху (от меньшего времени к большему)
+        return sortBy === "desc" ? dateB - dateA : dateA - dateB;
+      });
+
       return todos;
     } catch (error) {
       console.error("Ошибка при чтении файла todos.json:", error);
@@ -36,6 +50,7 @@ export const TodoService = {
       return [];
     }
   },
+
   async getTodoById(id: string | string[]): Promise<ITodo | undefined> {
     const todos = (await this._getRawData()) as ITodo[];
 
